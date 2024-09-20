@@ -7,12 +7,11 @@ import dotenv from 'dotenv'
 dotenv.config();
 
 const app = express();
-
 const PORT = process.env.PORT || 3000;
 
 // MongoDB configs
 // TODO: convert in envs
-mongoose.connect('mongodb://hadmin:hadmin123@localhost:27017/tonline')
+mongoose.connect('mongodb://hadmin:hadmin123@localhost:27017/tonline?authSource=admin')
   .then(() => console.log('MongoDB conection ON 🚀️'))
   .catch(err => console.error('error to connect to MongoDB 😓️', err));
 
@@ -31,32 +30,56 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   const records = content.split('\n');
 
   const transactions = records.map(record => {
-    const [id, nome, cpfCnpj, data, valor] = record.split(';');
+    const fields = record.split(';');
 
-    return {
-      id,
-      nome,
-      cpfCnpj,
-      data: new Date(data),
-      valor: parseFloat(valor),
-    };
+    const transaction = fields.reduce((acc, field) => {
+      const [key, value] = field.split(':');
+      acc[key] = value;
+      return acc;
+    }, {} as { [key: string]: string });
+
+    console.log('### -> ',transaction.valor);
+    
+    if(transaction.id){
+      const parsedValue = parseFloat(transaction.valor);
+      if (isNaN(parsedValue)) {
+        console.error(`Invalid value for "valor": ${transaction.valor}`);
+        throw new Error(`Invalid value for "valor": ${transaction.valor}`);
+      }
+
+      return {
+        id: transaction.id,
+        nome: transaction.nome,
+        cpfCnpj: transaction.cpfCnpj,
+        data: new Date(transaction.data),
+        valor: parsedValue,
+      };
+    }else{
+      console.error('Object is empty!');
+    }
+    
   });
 
   try {
     for ( const transaction of transactions ){
-      const alreadyExistsTransaction = await Transaction.findOne({ id: transaction.id });
+      if(transaction?.id){
+        const alreadyExistsTransaction = await Transaction.findOne({ id: transaction.id });
 
-      if(!alreadyExistsTransaction) {
-        await Transaction.create(transaction);
-      } else {
-        console.log(`Transaction with id: ${transaction.id} alredy exists.`);
-        
+        if(!alreadyExistsTransaction) {
+          await Transaction.create(transaction);
+        } else {
+          console.log(`Transaction with id: ${transaction.id} alredy exists.`);
+          
+        }
+      }else{
+        console.error('Object is empty!');
       }
+      
     }
     res.status(200).send('Success! 😎️');
   } catch (error) {
     console.error(error);
-    res.status(500).send('Error to save transactions. 🤯️');
+    res.status(500).send(`🤯️ Error to save transactions: ${error.message}`);
   }
 });
 
