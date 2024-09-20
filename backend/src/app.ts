@@ -2,14 +2,17 @@ import express, { Request, Response } from 'express';
 import mongoose from 'mongoose';
 import multer from 'multer';
 import Transaction from './models/Transaction';
+import dotenv from 'dotenv'
+
+dotenv.config();
 
 const app = express();
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 
 // MongoDB configs
 // TODO: convert in envs
-mongoose.connect('mongodb://hadmin:hadmin123@mongo:27017/tonline')
+mongoose.connect('mongodb://hadmin:hadmin123@localhost:27017/tonline')
   .then(() => console.log('MongoDB conection ON 🚀️'))
   .catch(err => console.error('error to connect to MongoDB 😓️', err));
 

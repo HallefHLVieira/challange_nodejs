@@ -1,17 +1,25 @@
-version: '3'
+# Use root/example as user/password credentials
+version: '3.1'
+
 services:
+
   mongo:
-    image: mongo:5.0
-    container_name: my_db
+    image: mongo
+    restart: always
     ports:
-      - "27017:27017"
+      - 27017:27017
     environment:
       MONGO_INITDB_DATABASE: tonline
       MONGO_INITDB_ROOT_USERNAME: hadmin
       MONGO_INITDB_ROOT_PASSWORD: hadmin123
-    volumes:
-      - mongo_data:/data/db
-    restart: unless-stopped
 
-volumes:
-  mongo_data:
+  mongo-express:
+    image: mongo-express
+    restart: always
+    ports:
+      - 8081:8081
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: hadmin
+      ME_CONFIG_MONGODB_ADMINPASSWORD: hadmin123
+      ME_CONFIG_MONGODB_URL: mongodb://hadmin:hadmin123@mongo:27017/
+      ME_CONFIG_BASICAUTH: 1
