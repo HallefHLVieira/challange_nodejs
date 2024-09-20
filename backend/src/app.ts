@@ -29,7 +29,7 @@ const upload = multer({ storage });
 
 // My routes
 // TODO: create route files after
-app.post('/upload', upload.single('file'), async (req: Request, res: Response) => {
+app.post('/upload', upload.single('transacoes'), async (req: Request, res: Response) => {
   if (!req.file) {
     return res.status(400).send('A file is required. 🧐️');
   }
@@ -96,14 +96,14 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
 
 app.get('/transactions', async (req: Request, res: Response) => {
   try {
-    const { page = 1, limit = 20, cliente, startDate, endDate } = req.query;
+    const { page = 1, limit = 20, cpfCnpj, startDate, endDate } = req.query;
 
     // TODO: create interface to query object
     const queryFilters: any = {};
 
     // Ammount filter by Client
-    if (cliente) {
-      const clienteData = await Cliente.findOne({ cpfCnpj: cliente });
+    if (cpfCnpj) {
+      const clienteData = await Cliente.findOne({ cpfCnpj: cpfCnpj });
       
       if (clienteData) {
         queryFilters.clienteId = clienteData._id;

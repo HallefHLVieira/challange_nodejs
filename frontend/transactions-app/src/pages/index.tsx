@@ -50,7 +50,7 @@ const Dashboard = () => {
     }
 
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('transacoes', file);
 
     try {
       const response = await axios.post('http://localhost:3000/upload', formData, {
@@ -83,7 +83,7 @@ const Dashboard = () => {
 
       <div style={{ marginBottom: '20px' }}>
         <h2>Filtros</h2>
-        <label>Nome do cliente: </label>
+        <label>CPF/CNPJ do cliente: </label>
         <input
           type="text"
           name="client"
@@ -124,8 +124,8 @@ const Dashboard = () => {
           {transactions.map((transaction: any) => (
             <tr key={transaction.id}>
               <td>{transaction.id}</td>
-              <td>{transaction.nome}</td>
-              <td>{transaction.cpfCnpj}</td>
+              <td>{transaction.clienteId.nome}</td>
+              <td>{transaction.clienteId.cpfCnpj}</td>
               <td>{new Date(transaction.data).toLocaleDateString()}</td>
               <td>{transaction.valor}</td>
             </tr>
