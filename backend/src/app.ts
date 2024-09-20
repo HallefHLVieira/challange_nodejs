@@ -87,7 +87,62 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   }
 });
 
-// Server init
+app.get('/transactions', async (req: Request, res: Response) => {
+  try {
+    const { page = 1, limit = 20, cliente, startDate, endDate } = req.query;
+
+    // TODO: create interface to query object
+    const queryFilters: any = {};
+
+    // Ammount filter by Client
+    if (cliente) {
+      const clienteData = await Cliente.findOne({ cpfCnpj: cliente });
+      
+      if (clienteData) {
+        queryFilters.clienteId = clienteData._id;
+      } else {
+        return res.status(404).json({ message: 'Client not found.' });
+      }
+    }
+
+    // Ammount filter by dates range
+    if (startDate || endDate) {
+      queryFilters.data = {};
+      if (startDate) {
+        queryFilters.data.$gte = new Date(startDate as string);
+      }
+      if (endDate) {
+        queryFilters.data.$lte = new Date(endDate as string);
+      }
+    }
+
+    // implement pagination to front
+    const pageNumber = parseInt(page as string, 10);
+    const pageLimit = parseInt(limit as string, 10);
+    const skip = (pageNumber - 1) * pageLimit;
+
+    const transactions = await Transaction.find(queryFilters)
+      .sort({ data: -1 })
+      .skip(skip)
+      .limit(pageLimit)
+      .populate('clienteId', 'nome cpfCnpj')
+      .exec();
+
+    const totalTransactions = await Transaction.countDocuments(queryFilters);
+
+    res.status(200).json({
+      transactions,
+      totalPages: Math.ceil(totalTransactions / pageLimit),
+      currentPage: pageNumber,
+    });
+  } catch (error: any) {
+    console.error('Error to fetch transactions:', error.message);
+    res.status(500).send('Error to fetch transactions. 🤯️');
+  }
+});
+
+
+// Server start
 app.listen(PORT, () => {
   console.log(`Servidor is running at http://localhost:${PORT}`);
 });
