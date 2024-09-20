@@ -3,6 +3,7 @@ import mongoose from 'mongoose';
 import multer from 'multer';
 import Transaction from './models/Transaction';
 import dotenv from 'dotenv'
+import Cliente from './models/Client';
 
 dotenv.config();
 
@@ -25,60 +26,63 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   if (!req.file) {
     return res.status(400).send('A file is required. 🧐️');
   }
-
+  
+  const startTimeToReadFile = Date.now();
   const content = req.file.buffer.toString();
   const records = content.split('\n');
 
-  const transactions = records.map(record => {
-    const fields = record.split(';');
-
-    const transaction = fields.reduce((acc, field) => {
-      const [key, value] = field.split(':');
-      acc[key] = value;
-      return acc;
-    }, {} as { [key: string]: string });
-
-    console.log('### -> ',transaction.valor);
-    
-    if(transaction.id){
-      const parsedValue = parseFloat(transaction.valor);
-      if (isNaN(parsedValue)) {
-        console.error(`Invalid value for "valor": ${transaction.valor}`);
-        throw new Error(`Invalid value for "valor": ${transaction.valor}`);
-      }
-
-      return {
-        id: transaction.id,
-        nome: transaction.nome,
-        cpfCnpj: transaction.cpfCnpj,
-        data: new Date(transaction.data),
-        valor: parsedValue,
-      };
-    }else{
-      console.error('Object is empty!');
-    }
-    
-  });
-
   try {
-    for ( const transaction of transactions ){
-      if(transaction?.id){
-        const alreadyExistsTransaction = await Transaction.findOne({ id: transaction.id });
+    for (const record of records) {
+      const [idTemp, nomeTemp, cpfCnpjTemp, dataTemp, valorTemp] = record.split(';');
 
-        if(!alreadyExistsTransaction) {
-          await Transaction.create(transaction);
-        } else {
-          console.log(`Transaction with id: ${transaction.id} alredy exists.`);
-          
+      if( idTemp ){
+        const id = idTemp.split(':')[1];
+        const nome = nomeTemp.split(':')[1];
+        const cpfCnpj = cpfCnpjTemp.split(':')[1];
+        const data = new Date(dataTemp.split(':')[1]);
+        const valor = parseFloat(valorTemp.split(':')[1]);
+
+        // Veriy if client exists
+        let clientAlreadyExists = await Cliente.findOne({ cpfCnpj });
+        
+        if (!clientAlreadyExists) {
+          clientAlreadyExists = await Cliente.create({ nome, cpfCnpj });
+        }
+
+        // Verify if transaction exists
+        const transactionAlreadyExists = await Transaction.findOne({ id });
+        
+        if (!transactionAlreadyExists) {
+          const newTransaction = await Transaction.create({
+            id,
+            data,
+            valor,
+            clienteId: clientAlreadyExists._id
+          });
+
+          clientAlreadyExists.transacoes.push(newTransaction._id);
+        
+          await clientAlreadyExists.save();
+
+        }else{
+          console.error(`Transaction with ID: ${id} already exists. 🧐️`);
         }
       }else{
-        console.error('Object is empty!');
+        console.error('Record is empty. 😅️')
       }
-      
     }
-    res.status(200).send('Success! 😎️');
-  } catch (error) {
+
+    const endTimeToReadFile = Date.now();
+    const executionTime = endTimeToReadFile - startTimeToReadFile;
+    
+    console.log(`Run time: ${executionTime}ms`);
+    res.status(200).send({
+      message: 'Upload success. 😎️',
+      duraction: executionTime
+    });
+  }catch (error: any) {
     console.error(error);
+    
     res.status(500).send(`🤯️ Error to save transactions: ${error.message}`);
   }
 });
