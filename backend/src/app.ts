@@ -40,8 +40,16 @@ app.post('/upload', upload.single('file'), async (req: Request, res: Response) =
   });
 
   try {
-    // TODO: verify if record already exists
-    await Transaction.insertMany(transactions);
+    for ( const transaction of transactions ){
+      const alreadyExistsTransaction = await Transaction.findOne({ id: transaction.id });
+
+      if(!alreadyExistsTransaction) {
+        await Transaction.create(transaction);
+      } else {
+        console.log(`Transaction with id: ${transaction.id} alredy exists.`);
+        
+      }
+    }
     res.status(200).send('Success! 😎️');
   } catch (error) {
     console.error(error);
