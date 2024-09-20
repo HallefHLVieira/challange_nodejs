@@ -4,10 +4,17 @@ import multer from 'multer';
 import Transaction from './models/Transaction';
 import dotenv from 'dotenv'
 import Cliente from './models/Client';
+import cors from 'cors'
 
 dotenv.config();
 
 const app = express();
+
+app.use(cors({
+  origin: 'http://localhost:3001',
+  methods: 'GET,POST',
+}));
+
 const PORT = process.env.PORT || 3000;
 
 // MongoDB configs
