@@ -46,7 +46,10 @@ app.post('/upload', upload.single('transacoes'), async (req: Request, res: Respo
         const id = idTemp.split(':')[1];
         const nome = nomeTemp.split(':')[1];
         const cpfCnpj = cpfCnpjTemp.split(':')[1];
+        console.log('data antes -> ', dataTemp.split(':')[1]);
+        
         const data = new Date(dataTemp.split(':')[1]);
+        console.log('data depois -> ', data);
         const valor = parseFloat(valorTemp.split(':')[1]);
 
         // Veriy if client exists
@@ -116,10 +119,14 @@ app.get('/transactions', async (req: Request, res: Response) => {
     if (startDate || endDate) {
       queryFilters.data = {};
       if (startDate) {
-        queryFilters.data.$gte = new Date(startDate as string);
+        const start = new Date(startDate as string);
+        start.setHours(0, 0, 0, 0);
+        queryFilters.data.$gte = start;
       }
       if (endDate) {
-        queryFilters.data.$lte = new Date(endDate as string);
+        const end = new Date(endDate as string);
+        end.setHours(23, 59, 59, 999);
+        queryFilters.data.$lte = end;
       }
     }
 
