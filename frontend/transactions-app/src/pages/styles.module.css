@@ -1,0 +1,224 @@
+.mainContainer {
+  background-color: #C4C4CC;
+  height: 100%;
+  width: 100%;
+  font-family: sans-serif;
+}
+
+.formBox {
+  width: 100%;
+  min-width: 360px;
+  margin: 0 auto;
+  padding: 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  
+  background-color: #f9f9f9;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.filterBox form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 600px;
+}
+
+.formBox form label {
+  font-size: 16px;
+  margin-bottom: 10px;
+  color: #333;
+  font-weight: 600;
+}
+
+.formBox form input[type="file"] {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  background-color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.formBox form input[type="file"]:hover {
+  border-color: #999;
+}
+
+.formBox form button {
+  padding: 10px 20px;
+  background-color: #64D7C7;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s ease, width 0.3s ease;
+  margin-left: 20px;
+  width: 90px;
+}
+
+.formBox form button:hover {
+  opacity: 0.5;
+  width: 95px;
+}
+
+.formBox p {
+  margin-top: 10px;
+  font-size: 14px;
+  color: #0070f3;
+  font-weight: 600;
+}
+
+
+@media (max-width: 600px) {
+  .formBox {
+    padding: 15px;
+    max-width: 100%;
+  }
+
+  .formBox form label {
+    font-size: 14px;
+    width: 100%;
+  }
+
+  .formBox form button {
+    font-size: 14px;
+    width: 100%;
+    margin: 0;
+  }
+}
+
+/* form filters */
+.formfilters {
+  width: 100%;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  padding-top: 8px;
+  display: flex;
+  gap: 8px;
+  background-color: #64D7C7;
+}
+
+.formfilters label{
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.formfilters input{
+  height: 30px;
+  width: 250px;
+  border-radius: 5px;
+  border: 1px;
+  font-size: 0.875rem;
+}
+
+.formfilters button{
+  padding: 10px 20px;
+  background-color: #060132;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.3s ease, width 0.3s ease;
+  margin-left: 20px; 
+  width: 150px;
+}
+
+.formfilters button:hover {
+  opacity: 0.5;
+  width: 155px;
+}
+
+/* table */
+.tableBox {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.tableBox h2{
+  margin: auto;
+  margin-bottom: 20px;
+}
+
+.tableBox table {
+  width: 100%;
+  border-collapse: collapse; /* Remove espaçamento entre bordas */
+  margin-bottom: 20px;
+  font-family: Arial, sans-serif;
+  text-align: left;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  overflow: hidden; /* Para bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.tableBox thead th {
+  background-color: #64D7C7;
+  color: white;
+  padding: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.tableBox tbody tr {
+  border-bottom: 1px solid #ddd;
+}
+
+.tableBox tbody tr:nth-child(even) {
+  background-color: #f1f1f1; /* Cor diferente para linhas pares */
+}
+
+.tableBox tbody td {
+  padding: 12px;
+  font-size: 14px;
+  color: #333;
+}
+
+.tableBox tbody tr:hover {
+  background-color: #A0E9E2;
+}
+
+@media (max-width: 768px) {
+  .tableBox thead {
+    display: none; /* Esconde o cabeçalho da tabela */
+  }
+
+  .tableBox tbody tr {
+    display: block;
+    margin-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+  }
+
+  .tableBox tbody td {
+    display: block;
+    text-align: right;
+    padding: 10px;
+    font-size: 13px;
+    position: relative;
+    padding-left: 50%;
+  }
+
+  .tableBox tbody td::before {
+    content: attr(data-label); /* Adiciona rótulos personalizados para cada campo */
+    position: absolute;
+    left: 0;
+    width: 50%;
+    padding-left: 10px;
+    font-weight: bold;
+    text-align: left;
+    color: #333;
+  }
+}
+

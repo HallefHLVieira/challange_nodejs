@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import Styles from './styles.module.css';
+import Header from './components/header/header';
 
 const Dashboard = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -25,7 +27,7 @@ const Dashboard = () => {
   useEffect(() => {
     fetchTransactions(currentPage);
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [currentPage, filters]);
+  }, [currentPage]);
 
   const handlePageUpdate = (page: number) => {
     setCurrentPage(page);
@@ -70,19 +72,21 @@ const Dashboard = () => {
   };
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h1>My Transactions</h1>
+    <div className={Styles.mainContainer}>
+      <Header />
 
       {/* Upload file */}
-      <form onSubmit={handleUpload} style={{ marginBottom: '20px' }}>
-        <label>Enviar arquivo (TXT): </label>
-        <input type="file" onChange={handleFileUpdate} />
-        <button type="submit">Enviar</button>
-      </form>
-      {message && <p>{message}</p>}
+      <div className={Styles.formBox}>
+        <form onSubmit={handleUpload}>
+          <label>Enviar arquivo (TXT): </label>
+          <input type="file" onChange={handleFileUpdate} />
+          <button type="submit">Enviar</button>
+        </form>
+        {message && <p>{message}</p>}
+      </div>
+      
 
-      <div style={{ marginBottom: '20px' }}>
-        <h2>Filtros</h2>
+      <div className={Styles.formfilters}>
         <label>CPF/CNPJ do cliente: </label>
         <input
           type="text"
@@ -108,30 +112,32 @@ const Dashboard = () => {
       </div>
 
 
-      <h2>Transações</h2>
-      <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Nome do cliente</th>
-            <th>CPF/CNPJ</th>
-            <th>Data</th>
-            <th>Valor</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-          {transactions.map((transaction: any) => (
-            <tr key={transaction.id}>
-              <td>{transaction.id}</td>
-              <td>{transaction.clienteId.nome}</td>
-              <td>{transaction.clienteId.cpfCnpj}</td>
-              <td>{new Date(transaction.data).toLocaleDateString()}</td>
-              <td>{transaction.valor}</td>
+      <div className={Styles.tableBox}>
+        <h2>TRANSAÇÕES</h2>
+        <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Nome do cliente</th>
+              <th>CPF/CNPJ</th>
+              <th>Data</th>
+              <th>Valor</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+            {transactions.map((transaction: any) => (
+              <tr key={transaction.id}>
+                <td>{transaction.id}</td>
+                <td>{transaction.clienteId.nome}</td>
+                <td>{transaction.clienteId.cpfCnpj}</td>
+                <td>{new Date(transaction.data).toLocaleDateString()}</td>
+                <td>{transaction.valor}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
 
       {/* Paginação */}
       <div>
