@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import Styles from './styles.module.css';
 import Header from './components/header/header';
+import Loader from './components/sub-components/loader';
 
 const Dashboard = () => {
   const [file, setFile] = useState<File | null>(null);
@@ -10,6 +11,8 @@ const Dashboard = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({ cpfCnpj  : '', startDate: '', endDate: '' });
+  const [showTable, setShowTable] = useState(false);
+  const [showSpinner, setShowSpinner] = useState(false);
 
   const fetchTransactions = async (page = 1) => {
     try {
@@ -19,6 +22,10 @@ const Dashboard = () => {
       });
       setTransactions(response.data.transactions);
       setTotalPages(response.data.totalPages);
+      if(response){
+        setShowSpinner(false);
+        setShowTable(true);
+      }
     } catch (error) {
       console.error('Error fetching transactions', error);
     }
@@ -44,6 +51,8 @@ const Dashboard = () => {
   };
 
   const handleUpload = async (e: React.FormEvent) => {
+    setShowSpinner(true);
+    setShowTable(false);
     e.preventDefault();
 
     if (!file) {
@@ -81,7 +90,13 @@ const Dashboard = () => {
           <label>Enviar arquivo (TXT): </label>
           <input type="file" onChange={handleFileUpdate} />
           <button type="submit">Enviar</button>
+          
         </form>
+        {showSpinner && (
+          <div className={Styles.spinner}>
+            <Loader />
+          </div>
+        )}
         {message && <p>{message}</p>}
       </div>
       
@@ -114,41 +129,55 @@ const Dashboard = () => {
 
       <div className={Styles.tableBox}>
         <h2>TRANSAÇÕES</h2>
-        <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Nome do cliente</th>
-              <th>CPF/CNPJ</th>
-              <th>Data</th>
-              <th>Valor</th>
-            </tr>
-          </thead>
-          <tbody>
-            {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
-            {transactions.map((transaction: any) => (
-              <tr key={transaction.id}>
-                <td>{transaction.id}</td>
-                <td>{transaction.clienteId.nome}</td>
-                <td>{transaction.clienteId.cpfCnpj}</td>
-                <td>{new Date(transaction.data).toLocaleDateString()}</td>
-                <td>{transaction.valor}</td>
+        {showTable && (
+          <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nome do cliente</th>
+                <th>CPF/CNPJ</th>
+                <th>Data</th>
+                <th>Valor</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {/* eslint-disable-next-line @typescript-eslint/no-explicit-any */}
+              {transactions.map((transaction: any) => (
+                <tr key={transaction.id}>
+                  <td>{transaction.id}</td>
+                  <td>{transaction.clienteId.nome}</td>
+                  <td>{transaction.clienteId.cpfCnpj}</td>
+                  <td>{new Date(transaction.data).toLocaleDateString()}</td>
+                  <td>{transaction.valor}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
 
-      {/* Paginação */}
-      <div>
-        <button disabled={currentPage === 1} onClick={() => handlePageUpdate(currentPage - 1)}>
+      {showTable && (
+        <div className={Styles.pagination}>
+        <button
+          disabled={currentPage === 1}
+          onClick={() => handlePageUpdate(currentPage - 1)}
+          className={`${Styles.pageButton} ${currentPage === 1 ? Styles.disabled : ''}`}
+        >
           Anterior
         </button>
-        <span> Página {currentPage} de {totalPages} </span>
-        <button disabled={currentPage === totalPages} onClick={() => handlePageUpdate(currentPage + 1)}>
+        <span className={Styles.pageInfo}>
+          Página {currentPage} de {totalPages}
+        </span>
+        <button
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageUpdate(currentPage + 1)}
+          className={`${Styles.pageButton} ${currentPage === totalPages ? Styles.disabled : ''}`}
+        >
           Próxima
         </button>
       </div>
+      )}
+      
     </div>
   );
 };

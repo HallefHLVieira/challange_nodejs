@@ -66,6 +66,12 @@
   width: 95px;
 }
 
+.spinner {
+  height: 40px;
+  width: 40px;
+  margin-top: 10px;
+}
+
 .formBox p {
   margin-top: 10px;
   font-size: 14px;
@@ -154,13 +160,13 @@
 
 .tableBox table {
   width: 100%;
-  border-collapse: collapse; /* Remove espaçamento entre bordas */
+  border-collapse: collapse;
   margin-bottom: 20px;
   font-family: Arial, sans-serif;
   text-align: left;
   background-color: #f9f9f9;
   border-radius: 8px;
-  overflow: hidden; /* Para bordas arredondadas */
+  overflow: hidden;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
@@ -177,7 +183,7 @@
 }
 
 .tableBox tbody tr:nth-child(even) {
-  background-color: #f1f1f1; /* Cor diferente para linhas pares */
+  background-color: #f1f1f1;
 }
 
 .tableBox tbody td {
@@ -192,7 +198,7 @@
 
 @media (max-width: 768px) {
   .tableBox thead {
-    display: none; /* Esconde o cabeçalho da tabela */
+    display: none;
   }
 
   .tableBox tbody tr {
@@ -211,7 +217,7 @@
   }
 
   .tableBox tbody td::before {
-    content: attr(data-label); /* Adiciona rótulos personalizados para cada campo */
+    content: attr(data-label);
     position: absolute;
     left: 0;
     width: 50%;
@@ -222,3 +228,41 @@
   }
 }
 
+/* paginação */
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+  padding: 10px 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.pageButton {
+  padding: 10px 15px;
+  background-color: #060132;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+  font-size: 14px;
+}
+
+.pageButton:hover:not(.disabled) {
+  background-color: #005bb5;
+  transform: scale(1.05);
+}
+
+.disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.pageInfo {
+  font-size: 14px;
+  color: #333;
+  margin: 0 10px;
+}
