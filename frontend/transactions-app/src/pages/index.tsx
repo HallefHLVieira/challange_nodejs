@@ -147,7 +147,7 @@ const Dashboard = () => {
                   <td>{transaction.id}</td>
                   <td>{transaction.clienteId.nome}</td>
                   <td>{transaction.clienteId.cpfCnpj}</td>
-                  <td>{new Date(transaction.data).toLocaleDateString()}</td>
+                  <td>{new Date(transaction.data).toLocaleDateString('pt-BR')}</td>
                   <td>{transaction.valor}</td>
                 </tr>
               ))}
