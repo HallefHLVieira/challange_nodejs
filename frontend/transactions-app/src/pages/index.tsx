@@ -7,13 +7,13 @@ const Dashboard = () => {
   const [transactions, setTransactions] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [filters, setFilters] = useState({ client: '', startDate: '', endDate: '' });
+  const [filters, setFilters] = useState({ cpfCnpj  : '', startDate: '', endDate: '' });
 
   const fetchTransactions = async (page = 1) => {
     try {
-      const { client, startDate, endDate } = filters;
+      const { cpfCnpj, startDate, endDate } = filters;
       const response = await axios.get('http://localhost:3000/transactions', {
-        params: { page, client, startDate, endDate },
+        params: { page, cpfCnpj, startDate, endDate },
       });
       setTransactions(response.data.transactions);
       setTotalPages(response.data.totalPages);
@@ -86,8 +86,8 @@ const Dashboard = () => {
         <label>CPF/CNPJ do cliente: </label>
         <input
           type="text"
-          name="client"
-          value={filters.client}
+          name="cpfCnpj"
+          value={filters.cpfCnpj}
           onChange={handleFilterUpdate}
         />
         <label>Desde: </label>
