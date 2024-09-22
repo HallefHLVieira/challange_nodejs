@@ -1,3 +1,6 @@
+
+![tela](https://github.com/user-attachments/assets/6b77ba52-0d16-4092-9919-65e5f8c59f44)
+
 ### Considerações importantes
 O foco inicial na construção desse desafio foi em resolver o problema(funcionalidades essesnciais) primeiro, então pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
 
