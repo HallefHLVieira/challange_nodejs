@@ -82,9 +82,6 @@ export const FetchTransactions = {
         .exec()
 
       const totalTransactions = await Transaction.countDocuments(queryFilters)
-      if (totalTransactions < 1) {
-        throw AppError('Transactions not found.', 404)
-      }
 
       res.status(200).json({
         transactions,
