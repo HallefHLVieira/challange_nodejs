@@ -1,7 +1,7 @@
 ### Considerações importantes
-O foco inicial na construção dessa aplicação foi em resolver o problema(funcionalidades essesnciais), então pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
+O foco inicial na construção desse desafio foi em resolver o problema(funcionalidades essesnciais) primeiro, então pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
 
-Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsabilidades dos arquivos, criar um bff no front para proteger ainda mais minhas requisições para o backend e melhorar o layout com uma estilização descente rs.
+Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsabilidades dos arquivos, criar um bff no front para proteger ainda mais minhas requisições para o backend.
 
 ## Instruções para executar aplicação em localhost
 - Certifique-se que o docker esteja instalado na sua máquina;
@@ -13,22 +13,48 @@ Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsab
 git clone git@github.com:HallefHLVieira/desafio_vaga.git
 ```
 
--Crie um arquivo .env a partir do .env.example
+#### Run backend
 
-- Vá até o diretório /backend e execute os comandos:
+- Abra seu terminal, vá até o diretório /backend e execute os seguintes comandos:
 ```bash
 npm install
+cp .env.example .env 
 docker-compose up -d
 npm run start:dev
 ```
-- Em seguida vá até o diretório /frontend e execute os comandos:
+
+- NPM install: Irá instalar todas as dependências necessárias para que o server backend funcione.
+- cp: Irá fazer uma cópia do env.example para .env no diretório atual.
+- docker-compose: Responsável por orquestrar o funcionamento de containers:
+  - up: comando para subir as configurações presentes no arquivo: docker-compose.yml.
+  - -d: parâmetro para que a execução dos containers fique em background.
+- npmm run start:dev: Para iniciar a aplicação.
+
+O backend estará disponível para acesso no endereço: http://localhost:3000
+
+Caso queira testar as rotas manualmente, abaixo destaco os Curls para que use em algum cliente Rest como Postmant ou Insomnia.
+
+Para fazer upload de um arquivo transacoes.txt
+```bash
+curl --request POST \
+  --url http://localhost:3000/upload \
+  --header 'Content-Type: multipart/form-data; boundary=---011000010111000001101001' \
+  --cookie sessionId=f57f2146-5667-4b88-bc82-435dc6d15ed0 \
+  --form file=@/home[YOUR_FILE_ADDRESS_HERE]fitransacoesle.txt
+```
+Para fazer o fetch e buscar as transações por meio de filtros (limit, cpnCnpj, startDate, endDate)
+```bash
+curl --request GET \
+  --url 'http://localhost:3000/transactions?limit=25' \
+  --cookie sessionId=f57f2146-5667-4b88-bc82-435dc6d15ed0
+```
+
+- Em seguida vá até o diretório /frontend/transactions-app e execute os comandos:
 ```bash
 npm install
 npm run dev
 ```
-
 - Feito isso, chame o endereço: http://localhost:3001 para abrir o dashboard
-
 
 
 ### RN's and RF's Backend
