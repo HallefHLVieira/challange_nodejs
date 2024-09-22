@@ -49,12 +49,13 @@ curl --request GET \
   --cookie sessionId=f57f2146-5667-4b88-bc82-435dc6d15ed0
 ```
 
+#### Run frontend
 - Em seguida vá até o diretório /frontend/transactions-app e execute os comandos:
 ```bash
 npm install
 npm run dev
 ```
-- Feito isso, chame o endereço: http://localhost:3001 para abrir o dashboard
+- Feito isso, chame o endereço: http://localhost:3001 em seu navegador para abrir o dashboard
 
 
 ### RN's and RF's Backend
