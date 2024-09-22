@@ -7,13 +7,13 @@ Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsab
 - Certifique-se que o docker esteja instalado na sua máquina;
 - Você precisará também do node na versão 20.12 ou superior, recomendo usar o nvm para alterar versão do node com mais praticidade.
 
-### Mãos na massa
+### #Mãos na massa
 - Clone o projeto em uma pasta de preferência com o comando:
 ```bash
 git clone git@github.com:HallefHLVieira/desafio_vaga.git
 ```
 
-#### Run backend
+#### #Run backend
 
 - Abra seu terminal, vá até o diretório /backend e execute os seguintes comandos:
 ```bash
@@ -49,12 +49,12 @@ curl --request GET \
   --cookie sessionId=f57f2146-5667-4b88-bc82-435dc6d15ed0
 ```
 
-### Notas importantes:
+#### #Notas importantes:
 - Foi configurado no docker-compose.yml duas imagens para o mongoDB
 - Para acessar o visualizador e acompanhar as alterações no banco, acesse em seu navegador o endereço: http://localhost:8081/ e selecione a banco desejado,
 no caso desse desafio, o nome do banco é o "tonline".
 
-#### Run frontend
+#### #Run frontend
 - Em seguida vá até o diretório /frontend/transactions-app e execute os comandos:
 ```bash
 npm install
