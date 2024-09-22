@@ -1,63 +1,26 @@
 import { AppError } from '@/errors/errors'
 import Cliente from '@/models/Client'
 import Transaction from '@/models/Transaction'
+import SaveTransactionsService from '@/services/save-transactions-service'
 import { QueryFilters } from '@/types'
 import { Request, Response } from 'express'
 
-export const CreateTransaction = {
+export const SaveTransactionsController = {
   async handle(req: Request, res: Response): Promise<Response | undefined> {
     if (!req.file) {
       return res.status(400).send('A file is required. 🧐️')
     }
 
-    const startTimeToReadFile = Date.now()
-    const content = req.file.buffer.toString()
-    const records = content.split('\n')
+    try{ 
+      const startTimeToReadFile = Date.now()
+      const content = req.file.buffer.toString()
+      const records = content.split('\n')
 
-    try {
-      for (const record of records) {
-        if (!record.trim()) {
-          continue
-        }
+      const promises = records
+        .filter((record) => record.trim())
+        .map((record) => SaveTransactionsService.execute(record));
 
-        const [idTemp, nomeTemp, cpfCnpjTemp, dataTemp, valorTemp] =
-          record.split(';')
-
-        if (idTemp) {
-          const id = idTemp.split(':')[1]
-          const nome = nomeTemp.split(':')[1]
-          const cpfCnpj = cpfCnpjTemp.split(':')[1]
-          const data = new Date(dataTemp.split(':')[1])
-          const valor = parseFloat(valorTemp.split(':')[1])
-
-          let clientAlreadyExists = await Cliente.findOne({ cpfCnpj })
-
-          if (!clientAlreadyExists) {
-            clientAlreadyExists = await Cliente.create({ nome, cpfCnpj })
-          }
-
-          const transactionAlreadyExists = await Transaction.findOne({ id })
-
-          if (!transactionAlreadyExists) {
-            const newTransaction = await Transaction.create({
-              id,
-              data,
-              valor,
-              clienteId: clientAlreadyExists._id,
-            })
-
-            clientAlreadyExists.transacoes.push(newTransaction._id)
-
-            await clientAlreadyExists.save()
-          } else {
-            console.error(`Transaction already exists. 🧐️`)
-            // throw AppError('Transaction already exists.', 409);
-          }
-        } else {
-          console.error('Record is empty. 😅️')
-          // throw AppError('Invalid transaction.', 400);
-        }
-      }
+      await Promise.all(promises);
 
       const endTimeToReadFile = Date.now()
       const executionTime = endTimeToReadFile - startTimeToReadFile
@@ -67,20 +30,13 @@ export const CreateTransaction = {
         message: 'Upload success. 😎️',
         duraction: executionTime,
       })
+
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
-      if (error.statusCode === 409) {
-        console.error(`Transaction already exists. 🧐️`)
-        res.status(409).send('Transaction already exists.')
-      }
-      if (error.statusCode === 400) {
-        console.error('Record is empty. 😅️')
-        res.status(409).send('Invalid transaction.')
-      }
       console.error(error)
       res.status(500).send(`🤯️ Error to save transactions: ${error.message}`)
     }
-  },
+  }
 }
 
 export const FetchTransactions = {
@@ -129,6 +85,7 @@ export const FetchTransactions = {
       if (totalTransactions < 1) {
         throw AppError('Transactions not found.', 404)
       }
+
       res.status(200).json({
         transactions,
         totalPages: Math.ceil(totalTransactions / pageLimit),

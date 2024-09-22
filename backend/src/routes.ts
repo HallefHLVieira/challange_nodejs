@@ -1,7 +1,7 @@
 import multer from 'multer'
 import { Router } from 'express'
 import {
-  CreateTransaction,
+  SaveTransactionsController,
   FetchTransactions,
 } from './controllers/transactions'
 
@@ -13,7 +13,7 @@ const upload = multer({ storage })
 transactionsRoutes.post(
   '/upload',
   upload.single('transacoes'),
-  CreateTransaction.handle,
+  SaveTransactionsController.handle,
 )
 
 transactionsRoutes.get('/transactions', FetchTransactions.handle)

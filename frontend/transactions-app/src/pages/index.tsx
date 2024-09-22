@@ -26,7 +26,8 @@ const Dashboard = () => {
         setShowSpinner(false);
         setShowTable(true);
       }
-    } catch (error) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    } catch (error: any) {
       if(error.status === 404){
         setTransactions(error.response.data.transactions)          
       }
@@ -150,7 +151,7 @@ const Dashboard = () => {
                   <td>{transaction.id}</td>
                   <td>{transaction.clienteId.nome}</td>
                   <td>{transaction.clienteId.cpfCnpj}</td>
-                  <td>{new Date(transaction.data).toLocaleDateString('pt-BR')}</td>
+                  <td>{new Date(transaction.data).toISOString().split('T')[0]}</td>
                   <td>{transaction.valor}</td>
                 </tr>
               ))}
