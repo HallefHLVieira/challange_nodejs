@@ -27,6 +27,9 @@ const Dashboard = () => {
         setShowTable(true);
       }
     } catch (error) {
+      if(error.status === 404){
+        setTransactions(error.response.data.transactions)          
+      }
       console.error('Error fetching transactions', error);
     }
   };
@@ -130,7 +133,7 @@ const Dashboard = () => {
       <div className={Styles.tableBox}>
         <h2>TRANSAÇÕES</h2>
         {showTable && (
-          <table border="1" cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
+          <table border={1} cellPadding="10" cellSpacing="0" style={{ width: '100%', marginBottom: '20px' }}>
             <thead>
               <tr>
                 <th>ID</th>
