@@ -1,7 +1,7 @@
 export interface QueryFilters {
-  clienteId?: {},
+  clienteId?: {}
   data?: {
-    $gte?: Date,
+    $gte?: Date
     $lte?: Date
-  },
+  }
 }

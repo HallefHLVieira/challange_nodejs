@@ -1,14 +1,21 @@
-import multer from "multer";
-import { Router } from 'express';
-import {CreateTransaction, FetchTransactions} from './controllers/transactions';
+import multer from 'multer'
+import { Router } from 'express'
+import {
+  CreateTransaction,
+  FetchTransactions,
+} from './controllers/transactions'
 
-const transactionsRoutes = Router();
+const transactionsRoutes = Router()
 
-const storage = multer.memoryStorage();
-const upload = multer({ storage });
+const storage = multer.memoryStorage()
+const upload = multer({ storage })
 
-transactionsRoutes.post('/upload', upload.single('transacoes'), CreateTransaction.handle);
+transactionsRoutes.post(
+  '/upload',
+  upload.single('transacoes'),
+  CreateTransaction.handle,
+)
 
-transactionsRoutes.get('/transactions', FetchTransactions.handle);
+transactionsRoutes.get('/transactions', FetchTransactions.handle)
 
-export {transactionsRoutes};
+export { transactionsRoutes }
