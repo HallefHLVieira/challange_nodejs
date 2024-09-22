@@ -68,6 +68,7 @@ export const CreateTransaction = {
         message: 'Upload success. 😎️',
         duraction: executionTime,
       })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.statusCode === 409) {
         console.error(`Transaction already exists. 🧐️`)
@@ -134,6 +135,7 @@ export const FetchTransactions = {
         totalPages: Math.ceil(totalTransactions / pageLimit),
         currentPage: pageNumber,
       })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
       if (error.statusCode === 404) {
         return res.status(404).json({
