@@ -11,16 +11,16 @@ export const SaveTransactionsController = {
       return res.status(400).send('A file is required. 🧐️')
     }
 
-    try{ 
+    try {
       const startTimeToReadFile = Date.now()
       const content = req.file.buffer.toString()
       const records = content.split('\n')
 
       const promises = records
         .filter((record) => record.trim())
-        .map((record) => SaveTransactionsService.execute(record));
+        .map((record) => SaveTransactionsService.execute(record))
 
-      await Promise.all(promises);
+      await Promise.all(promises)
 
       const endTimeToReadFile = Date.now()
       const executionTime = endTimeToReadFile - startTimeToReadFile
@@ -36,7 +36,7 @@ export const SaveTransactionsController = {
       console.error(error)
       res.status(500).send(`🤯️ Error to save transactions: ${error.message}`)
     }
-  }
+  },
 }
 
 export const FetchTransactions = {
