@@ -16,7 +16,6 @@ export const CreateTransaction = {
 
     try {
       for (const record of records) {
-        // Ignore empty lines on records
         if (!record.trim()) {
           continue
         }
