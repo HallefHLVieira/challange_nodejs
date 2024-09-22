@@ -51,10 +51,12 @@ export const CreateTransaction = {
             await clientAlreadyExists.save();
     
           }else{
-            throw AppError('Transaction already exists.', 409);
+            console.error(`Transaction already exists. 🧐️`);
+            // throw AppError('Transaction already exists.', 409);
           }
         }else{
-          throw AppError('Invalid transaction.', 400);
+          console.error('Record is empty. 😅️')
+          // throw AppError('Invalid transaction.', 400);
         }
       }
 
