@@ -50,9 +50,9 @@ curl --request GET \
 ```
 
 ### Notas importantes:
-
-Foi configurado no docker-compose.yml duas imagens para o mongoDB
-- 
+- Foi configurado no docker-compose.yml duas imagens para o mongoDB
+- Para acessar o visualizador e acompanhar as alterações no banco, acesse em seu navegador o endereço: http://localhost:8081/ e selecione a banco desejado,
+no caso desse desafio, o nome do banco é o "tonline".
 
 #### Run frontend
 - Em seguida vá até o diretório /frontend/transactions-app e execute os comandos:
@@ -63,9 +63,6 @@ npm run dev
 - Feito isso, chame o endereço: http://localhost:3001 em seu navegador para abrir o dashboard:
 Mongo: Imagem onde está a instalação do banco de dados em si.
 Mongo-express: ondee se encontra a configuração de um visualizador do banco de dados, algo similar ao phpMyAdmin para o mySql.
-
-Para acessar o visualizador e acompanhar as alterações no banco, acesse em seu navegador o endereço: http://localhost:8081/ e selecione a banco desejado,
-no caso desse desafio, o nome do banco é o "tonline".
 
 
 ### RN's and RF's Backend
