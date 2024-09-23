@@ -72,8 +72,6 @@ const Dashboard = () => {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
-      console.log(response);
-      
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore 
       setMessage(`${response.data.message} tempo de duração: ${response.data.duraction}ms`);
@@ -88,7 +86,7 @@ const Dashboard = () => {
     <div className={Styles.mainContainer}>
       <Header />
 
-      {/* Upload file */}
+      {/* Upload file section */}
       <div className={Styles.formBox}>
         <form onSubmit={handleUpload}>
           <label>Enviar arquivo (TXT): </label>
@@ -104,7 +102,7 @@ const Dashboard = () => {
         {message && <p>{message}</p>}
       </div>
       
-
+      {/* Filters section */}
       <div className={Styles.formfilters}>
         <label>CPF/CNPJ do cliente: </label>
         <input
@@ -130,7 +128,7 @@ const Dashboard = () => {
         <button onClick={() => fetchTransactions(1)}>Aplicar filtros</button>
       </div>
 
-
+      {/* Table section */}
       <div className={Styles.tableBox}>
         <h2>TRANSAÇÕES</h2>
         {showTable && (
@@ -160,6 +158,7 @@ const Dashboard = () => {
         )}
       </div>
 
+      {/* Paginator section */}
       {showTable && (
         <div className={Styles.pagination}>
         <button
@@ -169,9 +168,11 @@ const Dashboard = () => {
         >
           Anterior
         </button>
+
         <span className={Styles.pageInfo}>
           Página {currentPage} de {totalPages}
         </span>
+
         <button
           disabled={currentPage === totalPages}
           onClick={() => handlePageUpdate(currentPage + 1)}
