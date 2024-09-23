@@ -2,9 +2,14 @@
 ![tela](https://github.com/user-attachments/assets/6b77ba52-0d16-4092-9919-65e5f8c59f44)
 
 ### Considerações importantes
-O foco principal na resolução deste desafio foi: Resolver o problema de salvar arquivos em massa no melhor tempo possível.
+O foco principal na resolução deste desafio foi: Salvar arquivos em massa no melhor tempo possível, tendo em vista que a aplicação possa atender a requisitos de performance e escalabilidade mais facilmente.
+
 Para isso:
-- Escolhi manter a programação funcional ao invés da orientação a objetos com classes.
+- Escolhi manter a programação funcional ao invés da orientação a objetos com classes
+  - Assim posso evitar problemas relacionados com a sobrecarga de memória;
+  - Atuar mais próximo do paralelismo;
+  - Reduzir mudanças de estado das minhas variáveis;
+
 - Pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
 
 Porém, sei que em uma oportunidade de melhoria, eu poderia separar ainda mais as responsabilidades dos arquivos, criar um bff no front para acrescentar uma câmada de proteção para as requisições do frontend para o backend.
