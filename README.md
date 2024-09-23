@@ -2,9 +2,12 @@
 ![tela](https://github.com/user-attachments/assets/6b77ba52-0d16-4092-9919-65e5f8c59f44)
 
 ### Considerações importantes
-O foco inicial na construção desse desafio foi em resolver o problema(funcionalidades essesnciais) primeiro, então pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
+O foco principal na resolução deste desafio foi: Resolver o problema de salvar arquivos em massa no melhor tempo possível.
+Para isso:
+- Escolhi manter a programação funcional ao invés da orientação a objetos com classes.
+- Pontos relacionados a camadas da aplicação no backend e frontend foram despriorizados.
 
-Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsabilidades dos arquivos, criar um bff no front para proteger ainda mais minhas requisições para o backend.
+Porém, sei que em uma oportunidade de melhoria, eu poderia separar ainda mais as responsabilidades dos arquivos, criar um bff no front para acrescentar uma câmada de proteção para as requisições do frontend para o backend.
 
 ## Instruções para executar aplicação em localhost
 - Certifique-se que o docker esteja instalado na sua máquina;
@@ -12,6 +15,7 @@ Porém, sei que em uma oportunidade de melhoria, eu poderia separar as responsab
 
 ### #Mãos na massa
 - Clone o projeto em uma pasta de preferência com o comando:
+
 ```bash
 git clone git@github.com:HallefHLVieira/desafio_vaga.git
 ```
@@ -25,7 +29,6 @@ cp .env.example .env
 docker-compose up -d
 npm run start:dev
 ```
-
 - NPM install: Irá instalar todas as dependências necessárias para que o server backend funcione.
 - cp: Irá fazer uma cópia do env.example para .env no diretório atual.
 - docker-compose: Responsável por orquestrar o funcionamento de containers:
