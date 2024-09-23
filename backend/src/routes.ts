@@ -2,7 +2,7 @@ import multer from 'multer'
 import { Router } from 'express'
 import {
   SaveTransactionsController,
-  FetchTransactions,
+  FetchTransactionsController,
 } from './controllers/transactions'
 
 const transactionsRoutes = Router()
@@ -16,6 +16,6 @@ transactionsRoutes.post(
   SaveTransactionsController.handle,
 )
 
-transactionsRoutes.get('/transactions', FetchTransactions.handle)
+transactionsRoutes.get('/transactions', FetchTransactionsController.handle)
 
 export { transactionsRoutes }

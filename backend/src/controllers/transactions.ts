@@ -1,8 +1,5 @@
-import { AppError } from '@/errors/errors'
-import Cliente from '@/models/Client'
-import Transaction from '@/models/Transaction'
+import FetchTransactionsService from '@/services/fetch-transactions-service'
 import SaveTransactionsService from '@/services/save-transactions-service'
-import { QueryFilters } from '@/types'
 import { Request, Response } from 'express'
 
 export const SaveTransactionsController = {
@@ -39,54 +36,23 @@ export const SaveTransactionsController = {
   },
 }
 
-export const FetchTransactions = {
+export const FetchTransactionsController = {
   async handle(req: Request, res: Response): Promise<Response | undefined> {
     try {
       const { page = 1, limit = 20, cpfCnpj, startDate, endDate } = req.query
 
-      const queryFilters: QueryFilters = {}
-
-      if (cpfCnpj) {
-        const clienteData = await Cliente.findOne({ cpfCnpj })
-
-        if (clienteData) {
-          queryFilters.clienteId = clienteData._id
-        } else {
-          throw AppError('Client not found.', 404)
-        }
-      }
-
-      if (startDate || endDate) {
-        queryFilters.data = {}
-        if (startDate) {
-          const start = new Date(startDate as string)
-          start.setHours(0, 0, 0, 0)
-          queryFilters.data.$gte = start
-        }
-        if (endDate) {
-          const end = new Date(endDate as string)
-          end.setHours(23, 59, 59, 999)
-          queryFilters.data.$lte = end
-        }
-      }
-
-      const pageNumber = parseInt(page as string, 10)
-      const pageLimit = parseInt(limit as string, 10)
-      const skip = (pageNumber - 1) * pageLimit
-
-      const transactions = await Transaction.find(queryFilters)
-        .sort({ data: -1 })
-        .skip(skip)
-        .limit(pageLimit)
-        .populate('clienteId', 'nome cpfCnpj')
-        .exec()
-
-      const totalTransactions = await Transaction.countDocuments(queryFilters)
+      const data = await FetchTransactionsService.execute({
+        page: parseInt(page as string, 10),
+        limit: parseInt(limit as string, 10),
+        cpfCnpj: cpfCnpj as string,
+        endDate: endDate as string,
+        startDate: startDate as string,
+      })
 
       res.status(200).json({
-        transactions,
-        totalPages: Math.ceil(totalTransactions / pageLimit),
-        currentPage: pageNumber,
+        transactions: data.transactions,
+        totalPages: Math.ceil(data.totalTransactions / data.pageLimit),
+        currentPage: data.pageNumber,
       })
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
     } catch (error: any) {
