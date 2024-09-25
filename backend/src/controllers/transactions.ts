@@ -1,3 +1,4 @@
+import { calculeRunTimeExecution } from '@/scripts/calcule-duraction-time'
 import FetchTransactionsService from '@/services/fetch-transactions-service'
 import SaveTransactionsService from '@/services/save-transactions-service'
 import { Request, Response } from 'express'
@@ -11,21 +12,19 @@ export const SaveTransactionsController = {
     try {
       const startTimeToReadFile = Date.now()
       const content = req.file.buffer.toString()
-      const records = content.split('\n')
 
-      const promises = records
-        .filter((record) => record.trim())
-        .map((record) => SaveTransactionsService.execute(record))
-
-      await Promise.all(promises)
+      await SaveTransactionsService.execute(content)
 
       const endTimeToReadFile = Date.now()
-      const executionTime = endTimeToReadFile - startTimeToReadFile
 
-      console.log(`Run time: ${executionTime}ms`)
+      const executionTime = calculeRunTimeExecution(
+        startTimeToReadFile,
+        endTimeToReadFile,
+      )
+
       res.status(200).send({
         message: 'Upload success. 😎️',
-        duraction: executionTime,
+        runTime: executionTime,
       })
 
       // eslint-disable-next-line @typescript-eslint/no-explicit-any

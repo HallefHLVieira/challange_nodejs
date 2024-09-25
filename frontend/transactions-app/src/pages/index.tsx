@@ -74,7 +74,7 @@ const Dashboard = () => {
 
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore 
-      setMessage(`${response.data.message} tempo de duração: ${response.data.duraction}ms`);
+      setMessage(`${response.data.message} tempo de duração: ${response.data.runTime}ms`);
       fetchTransactions();
     } catch (error) {
       console.error(error);
