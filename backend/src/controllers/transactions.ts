@@ -2,21 +2,38 @@ import { calculeRunTimeExecution } from '@/scripts/calcule-duraction-time'
 import FetchTransactionsService from '@/services/fetch-transactions-service'
 import SaveTransactionsService from '@/services/save-transactions-service'
 import { Request, Response } from 'express'
+import readLine from 'node:readline'
 
 export const SaveTransactionsController = {
   async handle(req: Request, res: Response): Promise<Response | undefined> {
-    if (!req.file) {
-      return res.status(400).send('A file is required. 🧐️')
-    }
+    const startTimeToReadFile = Date.now()
 
-    try {
-      const startTimeToReadFile = Date.now()
-      const content = req.file.buffer.toString()
+    let processedLines = 0
 
-      await SaveTransactionsService.execute(content)
+    // Cria uma interface readline para ler o stream do arquivo linha a linha
+    const readLineControl = readLine.createInterface({
+      input: req,
+      crlfDelay: Infinity, // garantindo as quebras de linhas
+    })
 
+    // Processa as linhas do arquivo conforme elas chegam
+    readLineControl.on('line', async (line: string) => {
+      // Verifica se a linha é uma string válida
+      if (line && typeof line === 'string' && line.trim() !== '') {
+        try {
+          await SaveTransactionsService.execute(line) // Processa a linha
+          processedLines++
+        } catch (error) {
+          console.error('Error processing line:', error)
+        }
+      } else {
+        console.log('Linha em branco ou indefinida ignorada:', line)
+      }
+    })
+
+    // Quando todo o arquivo for lido, termina o processamento
+    readLineControl.on('close', () => {
       const endTimeToReadFile = Date.now()
-
       const executionTime = calculeRunTimeExecution(
         startTimeToReadFile,
         endTimeToReadFile,
@@ -25,13 +42,15 @@ export const SaveTransactionsController = {
       res.status(200).send({
         message: 'Upload success. 😎️',
         runTime: executionTime,
+        processedLines,
       })
+    })
 
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    } catch (error: any) {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    readLineControl.on('error', (error: any) => {
       console.error(error)
-      res.status(500).send(`🤯️ Error to save transactions: ${error.message}`)
-    }
+      res.status(500).send(`🤯️ Error to process file: ${error.message}`)
+    })
   },
 }
 

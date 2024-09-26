@@ -1,8 +1,8 @@
 import Cliente from '@/models/Client'
 import Transaction from '@/models/Transaction'
 
-async function saveTransaction(record: string) {
-  const [idTemp, nomeTemp, cpfCnpjTemp, dataTemp, valorTemp] = record.split(';')
+async function SaveTransaction(line: string) {
+  const [idTemp, nomeTemp, cpfCnpjTemp, dataTemp, valorTemp] = line.split(';')
 
   const id = idTemp.split(':')[1]
   const nome = nomeTemp.split(':')[1]
@@ -52,13 +52,8 @@ async function saveTransaction(record: string) {
 }
 
 const SaveTransactionsService = {
-  async execute(content: string) {
-    const records = content.split('\n')
-    const promises = records
-      .filter((record) => record.trim())
-      .map((record) => saveTransaction(record))
-
-    await Promise.all(promises)
+  async execute(line: string) {
+    return SaveTransaction(line)
   },
 }
 
