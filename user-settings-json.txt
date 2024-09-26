@@ -1,0 +1,65 @@
+{
+    // Config to adjust editor font
+    "editor.fontFamily": "Fira Code",
+    "editor.fontLigatures": true,
+    "editor.fontSize": 13,
+    "redhat.telemetry.enabled": false,
+    "editor.tabSize": 2,
+    "window.zoomLevel": 0.5,
+    "editor.lineHeight": 15,
+    //Create vertical lines to mark max size line to break
+    "editor.rulers": [
+        80,
+        120
+    ],
+    "editor.formatOnSave": false,
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit"
+    },
+    "eslint.debug": true,
+    "eslint.format.enable": true,
+    "eslint.codeActionsOnSave.mode":"all",
+    "eslint.validate": [ "javascript", "typescript" ],
+    // Apply effect to mak actual line selected
+    "editor.renderLineHighlight": "gutter",
+    // size font terminal vs code
+    "terminal.integrated.fontSize": 14,
+    "workbench.colorTheme": "Omni",
+    "workbench.iconTheme": "material-icon-theme",
+    "explorer.confirmDelete": false,
+    "terminal.integrated.profiles.osx": {
+        "bash": {
+            "path": "zsh",
+            "args": [
+                "-l"
+            ],
+            "icon": "terminal-bash"
+        },
+        "zsh": {
+            "path": "zsh",
+            "args": [
+                "-l"
+            ]
+        },
+        "fish": {
+            "path": "fish",
+            "args": [
+                "-l"
+            ]
+        },
+        "tmux": {
+            "path": "tmux",
+            "icon": "terminal-tmux"
+        },
+        "pwsh": {
+            "path": "pwsh",
+            "icon": "terminal-powershell"
+        }
+    },
+    "[prisma]": {
+        "editor.formatOnSave": true
+    },
+    "typescript.updateImportsOnFileMove.enabled": "always",
+    "javascript.updateImportsOnFileMove.enabled": "always",
+    "git.autofetch": true,
+}
